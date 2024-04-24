@@ -3,6 +3,7 @@ package main
 import (
 	"fmt"
 	"github.com/gofiber/fiber/v2"
+	"github.com/gofiber/fiber/v2/middleware/cors"
 	"log"
 )
 
@@ -17,6 +18,11 @@ func main() {
 	fmt.Println("Hello world")
 
 	app := fiber.New()
+
+	app.Use(cors.New(cors.Config{
+		AllowOrigins: "http://localhost:5173",
+		AllowHeaders: "Origin, Content-Type, Accept",
+	}))
 
 	todos := []Todo{}
 
@@ -56,7 +62,7 @@ func main() {
 	})
 
 	app.Get("/api/todos", func(c *fiber.Ctx) error {
-        return c.JSON(todos)
+		return c.JSON(todos)
 	})
 
 	log.Fatal(app.Listen(":4000"))
